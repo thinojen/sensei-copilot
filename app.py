@@ -47,24 +47,92 @@ EndFor""",
 st.markdown(
     """
 <style>
-.ladder {display:flex; gap:6px; margin:0.25rem 0 1rem 0;}
-.rung {flex:1; padding:6px 8px; border-radius:8px; font-size:0.8rem; text-align:center;
-       border:1px solid rgba(128,128,128,0.35); opacity:0.45;}
-.rung.done {opacity:0.8;}
-.rung.now {opacity:1; border-color:#e8590c; background:rgba(232,89,12,0.12); font-weight:600;}
-.small-muted {font-size:0.8rem; opacity:0.7;}
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;800&display=swap');
+
+html, body, [class*="css"], .stMarkdown, p, label, input, textarea, button {
+  font-family: 'Nunito', sans-serif !important;
+}
+h1, h2, h3, .hero h1 { font-family: 'Baloo 2', cursive !important; letter-spacing: -0.01em; }
+
+/* playful background dots */
+.stApp {
+  background-color: #FFF9EE;
+  background-image: radial-gradient(#FFD9A8 1.2px, transparent 1.2px);
+  background-size: 26px 26px;
+}
+[data-testid="stSidebar"] { background: #FFE6BF; border-right: 3px solid #FFD08A; }
+
+/* chunky buttons */
+.stButton > button, .stFormSubmitButton > button {
+  border-radius: 999px !important; font-weight: 800 !important; padding: 0.55rem 1.2rem !important;
+  border: 2.5px solid #2B2147 !important; box-shadow: 0 4px 0 #2B2147 !important;
+  transition: transform .08s ease, box-shadow .08s ease;
+}
+.stButton > button:hover, .stFormSubmitButton > button:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #2B2147 !important; }
+.stButton > button:active, .stFormSubmitButton > button:active { transform: translateY(3px); box-shadow: 0 1px 0 #2B2147 !important; }
+
+/* cards: form, chat bubbles, code */
+[data-testid="stForm"], [data-testid="stChatMessage"] {
+  background: #FFFFFF; border: 2.5px solid #2B2147; border-radius: 22px; box-shadow: 5px 5px 0 #FFC46B;
+}
+[data-testid="stChatMessage"] { padding: 0.9rem 1.1rem; margin-bottom: 0.8rem; }
+[data-testid="stCode"] { border: 2.5px solid #2B2147; border-radius: 18px; overflow: hidden; }
+[data-testid="stMetric"] {
+  background: #FFFFFF; border: 2.5px solid #2B2147; border-radius: 20px; padding: 0.8rem 1rem;
+  box-shadow: 4px 4px 0 #8FD3FF;
+}
+
+/* hero */
+.hero { background: linear-gradient(120deg, #FF6B2C 0%, #FF9F1C 55%, #FFD23F 100%);
+  border: 3px solid #2B2147; border-radius: 28px; padding: 1.6rem 1.8rem; margin-bottom: 1.2rem;
+  box-shadow: 6px 6px 0 #2B2147; color: #2B2147; }
+.hero h1 { font-size: 2.3rem; margin: 0 0 .3rem 0; line-height: 1.1; color: #2B2147; }
+.hero p { font-size: 1.1rem; margin: 0; font-weight: 600; }
+.steps { display:flex; gap:10px; margin-top: 1rem; flex-wrap: wrap; }
+.step { background:#FFFFFFdd; border:2px solid #2B2147; border-radius:999px; padding:4px 14px; font-weight:800; font-size:.9rem; }
+
+/* belt ladder */
+.belts { display:flex; gap:10px; margin: 0.4rem 0 1.2rem 0; flex-wrap: wrap; }
+.belt { flex:1; min-width: 110px; text-align:center; opacity:.4; transition: all .2s ease; }
+.belt .strap { height: 18px; border:2.5px solid #2B2147; border-radius: 6px; position: relative; }
+.belt .strap::after { content:""; position:absolute; left:50%; top:50%; width:16px; height:26px;
+  transform: translate(-50%,-50%) rotate(8deg); background: inherit; border:2.5px solid #2B2147; border-radius:5px; }
+.belt .lbl { font-weight:800; font-size:.82rem; margin-top:8px; }
+.belt .sub { font-size:.72rem; opacity:.75; }
+.belt.done { opacity:.75; }
+.belt.now { opacity:1; transform: translateY(-3px) scale(1.04); }
+.belt.now .lbl { color:#FF6B2C; }
+.small-muted { font-size:0.8rem; opacity:0.65; }
+.belt-badge { display:inline-block; padding:3px 12px; border:2px solid #2B2147; border-radius:999px; font-weight:800; font-size:.85rem; }
 </style>
 """,
     unsafe_allow_html=True,
 )
 
+BELTS = {
+    1: ("White belt", "#FFFFFF"),
+    2: ("Yellow belt", "#FFD23F"),
+    3: ("Orange belt", "#FF9F1C"),
+    4: ("Black belt", "#2B2147"),
+}
+
 
 def ladder_html(level: int) -> str:
     parts = []
     for n, (name, _) in prompts.HINT_LEVELS.items():
+        belt, colour = BELTS[n]
         cls = "now" if n == level else ("done" if n < level else "")
-        parts.append(f'<div class="rung {cls}">{n}. {name}</div>')
-    return '<div class="ladder">' + "".join(parts) + "</div>"
+        parts.append(
+            f'<div class="belt {cls}"><div class="strap" style="background:{colour}"></div>'
+            f'<div class="lbl">{belt}</div><div class="sub">{name}</div></div>'
+        )
+    return '<div class="belts">' + "".join(parts) + "</div>"
+
+
+def belt_badge(level: int) -> str:
+    belt, colour = BELTS[level]
+    fg = "#FFFFFF" if level == 4 else "#2B2147"
+    return f'<span class="belt-badge" style="background:{colour};color:{fg}">{belt} hint</span>'
 
 
 # ---------------------------------------------------------------- sidebar
@@ -127,8 +195,13 @@ def ninja_page():
     sess = st.session_state.get("session")
 
     if sess is None:
-        st.header("Stuck on your code? Let's figure it out together.")
-        st.write("Paste your code and I'll give you hints - you do the fixing. 💪")
+        st.markdown(
+            """<div class="hero"><h1>Stuck on your code? 🥷</h1>
+<p>Paste it in and Sensei gives you hints, but YOU do the fixing. That's how ninjas level up!</p>
+<div class="steps"><span class="step">1 · Paste your code</span><span class="step">2 · Get a hint</span>
+<span class="step">3 · Fix it yourself 🏆</span></div></div>""",
+            unsafe_allow_html=True,
+        )
 
         ex = st.selectbox("Try an example (or write your own below)", ["-"] + list(EXAMPLES))
         pre = EXAMPLES.get(ex, {})
@@ -168,6 +241,7 @@ def ninja_page():
             with st.chat_message(t["role"], avatar="🥷" if t["role"] == "assistant" else "🧒"):
                 st.markdown(t["text"])
                 if t["role"] == "assistant":
+                    st.markdown(belt_badge(t.get("level", 1)), unsafe_allow_html=True)
                     source = "mock response" if llm.is_mock() else f"{t['model']} · Nebius Token Factory"
                     note = f"⚡ {source}"
                     if t.get("guarded"):
@@ -199,7 +273,8 @@ def ninja_page():
                 if not st.session_state.get("ballooned"):
                     st.balloons()
                     st.session_state.ballooned = True
-                st.success(f"You fixed it yourself with {sess['level']} hint level(s)! That's real debugging. 🏆")
+                belt = BELTS[sess["level"]][0]
+                st.success(f"You fixed it yourself at **{belt}** level! That's real debugging. 🏆")
             else:
                 st.info("No worries - put your hand up and a sensei will come over. They'll know what to look at. 🙌")
             if d.get("next_exercise"):
@@ -246,7 +321,7 @@ def dashboard_page():
     left, right = st.columns([1, 1])
     with left:
         st.subheader("Where the class gets stuck")
-        st.bar_chart(df["concept"].value_counts(), horizontal=True)
+        st.bar_chart(df["concept"].value_counts(), horizontal=True, color="#FF6B2C")
     with right:
         st.subheader("Needs a check-in")
         flag = df[(df["solved"] == 0) | (df["hints_used"] >= prompts.MAX_LEVEL)]
