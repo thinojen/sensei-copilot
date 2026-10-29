@@ -4,6 +4,8 @@
 
 Built for the Nebius x NVIDIA Global AI Hackathon, **Best Apps and Agents** track.
 
+📄 **[Full project report](docs/PROJECT_REPORT.md)**: architecture, every design decision, the alternatives considered and why they weren't chosen.
+
 ## The problem
 
 At kids' coding clubs, one tutor ("sensei") looks after a room full of 7–15 year olds. When a child gets stuck, they either:
