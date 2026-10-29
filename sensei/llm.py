@@ -62,7 +62,7 @@ def clean(text: str) -> str:
     return text.strip()
 
 
-def chat(model: str, messages: list[dict], temperature: float = 0.4, max_tokens: int = 700) -> str:
+def chat(model: str, messages: list[dict], temperature: float = 0.4, max_tokens: int = 2000) -> str:
     if is_mock():
         from . import mock
 
@@ -73,10 +73,15 @@ def chat(model: str, messages: list[dict], temperature: float = 0.4, max_tokens:
         temperature=temperature,
         max_tokens=max_tokens,
     )
-    return clean(resp.choices[0].message.content or "")
+    choice = resp.choices[0]
+    text = clean(choice.message.content or "")
+    if choice.finish_reason == "length" and max_tokens < 8000:
+        # Ran out of room (usually while reasoning) - retry once with double the budget
+        return chat(model, messages, temperature, max_tokens * 2)
+    return text
 
 
-def chat_json(model: str, messages: list[dict], max_tokens: int = 900) -> dict:
+def chat_json(model: str, messages: list[dict], max_tokens: int = 4000) -> dict:
     """Ask for JSON and parse it robustly (models sometimes wrap it in prose/fences)."""
     raw = chat(model, messages, temperature=0.2, max_tokens=max_tokens)
     match = re.search(r"\{.*\}", raw, re.DOTALL)

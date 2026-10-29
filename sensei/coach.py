@@ -119,4 +119,4 @@ def class_insights(rows: list[dict]) -> str:
         {"role": "system", "content": prompts.INSIGHTS_SYSTEM},
         {"role": "user", "content": f"Recent sessions:\n{table}"},
     ]
-    return llm.chat(llm.MID_MODEL, messages, max_tokens=900)
+    return llm.chat(llm.MID_MODEL, messages, max_tokens=4000)
