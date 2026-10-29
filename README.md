@@ -47,7 +47,7 @@ All inference runs on **Nebius Token Factory** through its OpenAI-compatible API
 - **Minutes to first call:** Token Factory is OpenAI-compatible, so the standard `openai` Python SDK works by changing only the `base_url`. No custom client or new SDK to learn.
 - **One endpoint, three models:** swapping between Nano, Super and Ultra is a single string change, which made it easy to test which model suits each job and route each call to the cheapest model that does it well.
 - **No GPUs to manage:** Ultra (550B parameters) runs serverless behind the same API, so a solo builder can use a frontier-scale reasoning model without provisioning or hosting anything.
-- **Cheap enough to call on every keystroke of a lesson:** Nano's per-token price means a hint costs a fraction of a penny, so a whole classroom can use it.
+- **Cheap enough to call on every hint:** Nano's per-token price means a hint costs a fraction of a penny, so a whole classroom can use it.
 
 ### Other Nebius tools
 
