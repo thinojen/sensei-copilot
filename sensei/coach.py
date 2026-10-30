@@ -7,6 +7,11 @@ from . import llm, prompts
 
 _FENCE_RE = re.compile(r"```")
 _INLINE_CODE_RE = re.compile(r"`([^`]+)`")
+# "change it to i < length", "try changing that to <", "replace it with ..."
+_SUGGEST_FIX_RE = re.compile(
+    r"\b(chang\w*|replac\w*|swap\w*|switch\w*)\b[^.?!\n]{0,30}?\b(to|with)\s+[^.?!\n]{0,15}?[<>=!+\-*/()\[\]0-9]",
+    re.IGNORECASE,
+)
 
 
 def _norm(s: str) -> str:
@@ -19,7 +24,7 @@ def leaks_answer(hint: str, student_code: str) -> bool:
     A hint leaks if it contains a fenced code block, or an inline code snippet that
     looks like a *changed* version of one of the student's own lines.
     """
-    if _FENCE_RE.search(hint):
+    if _FENCE_RE.search(hint) or _SUGGEST_FIX_RE.search(hint):
         return True
     student_lines = {_norm(l) for l in student_code.splitlines() if len(l.strip()) > 3}
     for snippet in _INLINE_CODE_RE.findall(hint):
