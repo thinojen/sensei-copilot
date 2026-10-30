@@ -424,7 +424,7 @@ At about half a cent per session, a club of 20 children with 3 sessions each per
 | Public repository with an open-source licence | This repository, MIT licence shown in the About section |
 | README with setup instructions | `README.md`: install, set the key, verify models, run, deploy |
 | Highlights Nemotron and Token Factory usage | README sections "How it uses NVIDIA Nemotron on Nebius Token Factory" and "Where Token Factory accelerated the workflow", plus sections 5 and 13 of this report |
-| Demo video under 3 minutes | Public YouTube video (link in the Devpost submission) |
+| Demo video under 3 minutes | [Demo video on YouTube](https://youtu.be/SMYMNoHeBrA) |
 | Feedback on Nebius and NVIDIA tools | Submitted with the Devpost entry |
 | New during the submission period | Built from scratch on 28–29 October 2026 |
 
