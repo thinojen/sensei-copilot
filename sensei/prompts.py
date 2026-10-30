@@ -90,7 +90,7 @@ Respond with ONLY a JSON object, no prose:
   "misconception": "<one sentence: what the child believes that isn't true>",
   "evidence": "<the code fragment or behaviour that shows it>",
   "confidence": "<low|medium|high>",
-  "next_exercise": "<a 5-minute practice task that targets this misconception, kid-friendly>",
+  "next_exercise": "<a 5-minute practice task on a NEW small program that targets this misconception, kid-friendly. Never tell them how to fix their original code>",
   "sensei_note": "<one sentence tip for the tutor on how to explain it>"
 }}"""
 
