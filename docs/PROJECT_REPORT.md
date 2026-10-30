@@ -420,7 +420,7 @@ At about half a cent per session, a club of 20 children with 3 sessions each per
 | Runs on Nebius Token Factory or AI Cloud | Every hint, diagnosis and insight is a runtime call to the Token Factory inference API |
 | Uses at least one NVIDIA open-source model | Three: Nemotron 3 Nano, Super and Ultra |
 | Fits a track | **Best Apps and Agents**: a copilot people would actually use, with Ultra for serious reasoning and Nano/Super for fast everyday calls, as the track describes |
-| Working demo URL | Streamlit Community Cloud deployment (link in the Devpost submission) |
+| Working demo URL | [sensei-copilot.streamlit.app](https://sensei-copilot.streamlit.app/) on Streamlit Community Cloud |
 | Public repository with an open-source licence | This repository, MIT licence shown in the About section |
 | README with setup instructions | `README.md`: install, set the key, verify models, run, deploy |
 | Highlights Nemotron and Token Factory usage | README sections "How it uses NVIDIA Nemotron on Nebius Token Factory" and "Where Token Factory accelerated the workflow", plus sections 5 and 13 of this report |

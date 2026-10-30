@@ -4,6 +4,8 @@
 
 Built for the Nebius x NVIDIA Global AI Hackathon, **Best Apps and Agents** track.
 
+🚀 **[Try the live demo](https://sensei-copilot.streamlit.app/)** (if the app is asleep, click the wake-up button and wait about 30 seconds)
+
 📄 **[Full project report](docs/PROJECT_REPORT.md)**: architecture, every design decision, the alternatives considered and why they weren't chosen.
 
 ## The problem
